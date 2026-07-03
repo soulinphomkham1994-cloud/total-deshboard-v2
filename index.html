@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ລາຍງານສະຫຼຸບງານປະຈຳວັນ | Daily Production Dashboard</title>
+<meta name="theme-color" content="#0A0807">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23E01B33%22/></svg>">
+</head>
+<body data-theme="dark">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="title">ລາຍງານສະຫຼຸບງານປະຈຳວັນ</div>
+        <div class="subtitle">Daily Production &amp; Order Dashboard</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a class="nav-btn" href="#" id="linkOrders" target="_blank" rel="noopener"><span class="dot"></span>ກົດເບິ່ງລາຍການອໍເດີ</a>
+      <a class="nav-btn" href="#" id="linkWarehouse" target="_blank" rel="noopener"><span class="dot"></span>ກົດເບິ່ງສາງວັດຖຸດິບ</a>
+      <a class="nav-btn" href="#" id="linkCutSew" target="_blank" rel="noopener"><span class="dot"></span>ກົດເບິ່ງບົບສະຫຼຸບ ຕັດ-ຫຍິບ</a>
+    </nav>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="ສະຫຼັບໂໝດມືດ/ສະຫວ່າງ">
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="wrap" id="captureArea">
+
+  <div class="status-strip">
+    <span class="live-dot"></span>
+    <span id="statusText">ກຳລັງເຊື່ອມຕໍ່ Google Sheets…</span>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <!-- ================= HERO : ຍອດຜະລິດສຳເລັດມື້ນີ້ ================= -->
+  <section class="hero">
+    <div>
+      <div class="hero-label">ຍອດຜະລິດສຳເລັດມື້ນີ້</div>
+      <div class="hero-number skeleton" id="todayProduction">0<span class="unit">ຊິ້ນ</span></div>
+      <div class="hero-sub" id="todaySheetName">ອ້າງອີງ Sheet ເດືອນປັດຈຸບັນ</div>
+      <svg class="ekg" viewBox="0 0 340 64" preserveAspectRatio="none">
+        <path d="M0 32 L60 32 L75 8 L90 56 L105 32 L160 32 L175 18 L190 46 L205 32 L340 32"/>
+      </svg>
+    </div>
+    <div class="hero-right">
+      <div class="mini-stat">
+        <span class="k">ອໍເດີໃໝ່ວັນນີ້</span>
+        <span class="v skeleton stat-neworder" id="dailyOrder">0</span>
+      </div>
+      <div class="mini-stat">
+        <span class="k">ອໍເດີຄ້າງທັງໝົດ</span>
+        <span class="v skeleton stat-pending" id="totalOrder">0</span>
+      </div>
+      <div class="mini-stat">
+        <span class="k">ອັບເດດລ່າສຸດ</span>
+        <span class="v" id="lastUpdated" style="font-size:.95rem">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GRID CARDS ================= -->
+  <section class="grid">
+
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+      <div class="label">ຍອດຜະລິດລວມທັງປີ</div>
+      <div class="value skeleton" id="yearTotal">0 <small>ຊິ້ນ</small></div>
+      <div class="foot">Named range: year</div>
+    </div>
+
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <div class="label">ປະມານການຍອດຂາຍລວມທັງປີ</div>
+      <div class="value skeleton" id="yearRevenue">0 <small>ກີບ</small></div>
+      <div class="foot" id="revenueFormula">year × 99,000 ກີບ</div>
+    </div>
+
+    <div class="card wide accent">
+      <span class="badge">ພະຍາກອນ</span>
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></div>
+      <div class="label">ພະຍາກອນໄລຍະເວລາເຄລຍວຽກທັງໝົດ</div>
+      <div class="value skeleton" id="etaText">— </div>
+      <div class="eta-track"><div class="eta-fill" id="etaFill"></div></div>
+      <div class="foot" id="etaFormula">ອໍເດີຄ້າງ ÷ ກຳລັງຜະລິດ 3,500 ຊິ້ນ/ເດືອນ</div>
+    </div>
+
+  </section>
+
+  <!-- ================= CHARTS ================= -->
+  <section class="charts-row">
+    <div class="chart-card">
+      <div class="chart-card-head">
+        <div>
+          <h3>ສະຖິຕິການຜະລິດລາຍອາທິດ</h3>
+          <div class="chart-sub">ຍອດຜະລິດ / ອໍເດີໃໝ່ / ອໍເດີຄ້າງ ແຕ່ລະວັນ ໃນອາທິດປັດຈຸບັນ</div>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="dot" style="background:var(--chart-production)"></span>ຜະລິດ</span>
+          <span class="legend-item"><span class="dot" style="background:var(--chart-neworder)"></span>ອໍເດີໃໝ່</span>
+          <span class="legend-item"><span class="dot" style="background:var(--chart-pending)"></span>ອໍເດີຄ້າງ</span>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="weeklyChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>ສະຖິຕິການຜະລິດລາຍເດືອນ</h3>
+      <div class="chart-sub">ຍອດຜະລິດແຕ່ລະເດືອນ ໃນປີປັດຈຸບັນ (mond)</div>
+      <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>ຂໍ້ມູນອັບເດດອັດຕະໂນມັດທຸກ <span id="refreshSeconds">30</span> ວິນາທີ ຈາກ Google Sheets</span>
+    <div class="footer-actions">
+      <button class="refresh-btn no-print" id="screenshotBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        ບັນທຶກຮູບໜ້າຈໍ
+      </button>
+      <button class="refresh-btn no-print" id="printBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        ພິມ / ບັນທຶກເປັນບິນ (PDF)
+      </button>
+      <button class="refresh-btn no-print" id="refreshBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        ອັບເດດຂໍ້ມູນດຽວນີ້
+      </button>
+    </div>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/history.js"></script>
+<script src="js/sheets.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
