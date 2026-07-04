@@ -10,8 +10,12 @@
 const SheetsAPI = (() => {
 
   function currentLaoMonthSheetName() {
-    const monthIndex = new Date().getMonth(); // 0-11
-    return CONFIG.LAO_MONTH_SHEET_NAMES[monthIndex];
+    const now = new Date();
+    const monthIndex = now.getMonth(); // 0-11
+    const monthName = CONFIG.LAO_MONTH_SHEET_NAMES[monthIndex];
+    const year = CONFIG.YEAR_OVERRIDE || now.getFullYear();
+    const template = CONFIG.MONTH_SHEET_NAME_TEMPLATE || "{month}";
+    return template.replace("{month}", monthName).replace("{year}", year);
   }
 
   function buildValuesUrl(spreadsheetId, ranges) {

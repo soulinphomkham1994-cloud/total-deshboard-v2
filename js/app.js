@@ -272,6 +272,7 @@
         backgroundColor: bgColor,
         scale: Math.min(2, window.devicePixelRatio || 1.5),
         useCORS: true,
+        ignoreElements: (el) => el.classList && el.classList.contains("no-print"),
       });
       const link = document.createElement("a");
       const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
